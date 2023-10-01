@@ -62,6 +62,8 @@ public class DroolsService {
         return result;
     }
 
+    // See https://access.redhat.com/documentation/en-us/red_hat_process_automation_manager/7.6/html/designing_a_decision_service_using_drl_rules/drl-rules-con_drl-rules
+    // Calling halt() in the drl file allows you to exit a rule on rule break.
     public RuleResult checkBusinessIsValidForTaxiRide(Taxi taxi) {
         RuleResult result = new RuleResult();
         KieSession kieSession = kieContainer.newKieSession();
@@ -69,6 +71,18 @@ public class DroolsService {
         kieSession.setGlobal("ruleResult", result);
         kieSession.insert(taxi);
         kieSession.fireAllRules();
+        kieSession.dispose();
+        return result;
+    }
+
+    public RuleResult runHaltExampleToExitOnFirstRuleBreak(Customer customer) {
+        RuleResult result = new RuleResult();
+        KieSession kieSession = kieContainer.newKieSession();
+        kieSession.getAgenda().getAgendaGroup("Exit on first condition rules").setFocus();
+        kieSession.setGlobal("ruleResult", result);
+        kieSession.insert(customer);
+        kieSession.fireUntilHalt();
+//        kieSession.halt();
         kieSession.dispose();
         return result;
     }

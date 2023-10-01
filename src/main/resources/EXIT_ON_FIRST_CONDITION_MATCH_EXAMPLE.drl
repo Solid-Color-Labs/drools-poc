@@ -1,0 +1,31 @@
+global com.poc.drools.domain.RuleResult ruleResult;
+import com.poc.drools.domain.Customer;
+dialect "mvel"
+
+agenda-group "Exit on first condition rules"
+rule "First Rule"
+    when
+        Customer(name == "John" || name == "Jane")
+    then
+      	ruleResult.setRuleBreak(true);
+      	halt();
+end
+
+rule "Second Rule"
+    when
+        Customer(name != "Karen" && name != "Kyle")
+    then
+      	ruleResult.setRuleBreak(true);
+      	halt();
+end
+
+// Note: 'when' condition is blank
+// Needed to catch all if first or second
+// rule not broken. Otherwise
+// program will run forever, as halt() is never invoked
+rule "Last catch all rule"
+    when
+    then
+        ruleResult.setRuleBreak(false);
+        halt();
+end

@@ -21,6 +21,7 @@ public class DroolsConfiguration {
         kieFileSystem.write(ResourceFactory.newClassPathResource("BOOLEAN_RULE.drl"));
         kieFileSystem.write(ResourceFactory.newClassPathResource("CUSTOMER_RULES.drl"));
         kieFileSystem.write(ResourceFactory.newClassPathResource("LIST_EXAMPLE_RULES.drl"));
+        kieFileSystem.write(ResourceFactory.newClassPathResource("EXIT_ON_FIRST_CONDITION_MATCH_EXAMPLE.drl"));
         kieFileSystem.write(ResourceFactory.newClassPathResource("Discount.drl.xlsx"));
 
         KieBuilder kieBuilder = kieServices.newKieBuilder(kieFileSystem);

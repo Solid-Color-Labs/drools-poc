@@ -9,8 +9,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 // See more info here: https://www.baeldung.com/drools
 @SpringBootTest
@@ -58,6 +57,20 @@ public class DroolsUsecaseExamples {
         Taxi taxi = new Taxi(List.of(new Customer(Customer.CustomerType.BUSINESS, 1, "Microsoft")));
         RuleResult result = droolsService.checkBusinessIsValidForTaxiRide(taxi);
         assertTrue(result.isRuleBreak());
+    }
+
+    @Test
+    public void shouldBreakRuleIfBadName() {
+        Customer customer = new Customer(Customer.CustomerType.INDIVIDUAL, 5, "Mike");
+        RuleResult result = droolsService.runHaltExampleToExitOnFirstRuleBreak(customer);
+        assertTrue(result.isRuleBreak());
+    }
+
+    @Test
+    public void shouldNotBreakRuleIfGoodName() {
+        Customer customer = new Customer(Customer.CustomerType.INDIVIDUAL, 5, "Karen");
+        RuleResult result = droolsService.runHaltExampleToExitOnFirstRuleBreak(customer);
+        assertFalse(result.isRuleBreak());
     }
 
 }
