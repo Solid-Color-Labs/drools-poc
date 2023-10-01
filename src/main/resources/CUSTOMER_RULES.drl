@@ -1,0 +1,18 @@
+global com.poc.drools.domain.RuleResult ruleResult;
+import com.poc.drools.domain.Customer;
+dialect "mvel"
+
+agenda-group "Customer Rules"
+rule "in operator example"
+    when
+        customerInstance:Customer(name in ("John", "Jane"))
+    then
+      	ruleResult.setRuleBreak(true);
+end
+
+rule "not in operator example"
+    when
+        customerInstance:Customer(name not in ("John", "Jane"))
+    then
+      	ruleResult.setRuleBreak(false);
+end

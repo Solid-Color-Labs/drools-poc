@@ -1,13 +1,13 @@
 package com.poc.drools.examples;
 
-import com.poc.drools.domain.Fare;
-import com.poc.drools.domain.RuleResult;
-import com.poc.drools.domain.TaxiRide;
-import com.poc.drools.domain.Customer;
+import com.poc.drools.domain.*;
 import com.poc.drools.service.DroolsService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -41,9 +41,23 @@ public class DroolsUsecaseExamples {
     // See https://www.baeldung.com/drools-excel
     @Test
     public void shouldRunDecisionTable() {
-        Customer customer = new Customer(Customer.CustomerType.INDIVIDUAL, 5);
+        Customer customer = new Customer(Customer.CustomerType.INDIVIDUAL, 5, "John");
         int discount = droolsService.fireCustomerDecisionTable(customer);
         assertEquals(15, discount);
+    }
+
+    @Test
+    public void shouldBreakRuleOnInvalidName() {
+        Customer customer = new Customer(Customer.CustomerType.INDIVIDUAL, 10, "Jane");
+        RuleResult result = droolsService.checkCustomerName(customer);
+        assertTrue(result.isRuleBreak());
+    }
+
+    @Test
+    public void shouldBreakRuleIfContainsValidBusiness() {
+        Taxi taxi = new Taxi(List.of(new Customer(Customer.CustomerType.BUSINESS, 1, "Microsoft")));
+        RuleResult result = droolsService.checkBusinessIsValidForTaxiRide(taxi);
+        assertTrue(result.isRuleBreak());
     }
 
 }

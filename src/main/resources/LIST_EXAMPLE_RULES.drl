@@ -1,0 +1,17 @@
+global com.poc.drools.domain.RuleResult ruleResult;
+import com.poc.drools.domain.Taxi;
+import com.poc.drools.domain.Customer;
+import com.poc.drools.domain.Customer.CustomerType
+
+dialect "mvel"
+no-loop false
+
+agenda-group "List Rules"
+
+rule "field list example"
+    when
+        Taxi($customers: customers)
+        Customer(name == "Microsoft" && type == CustomerType.BUSINESS) from $customers
+    then
+        ruleResult.setRuleBreak(true);
+end

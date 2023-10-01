@@ -14,6 +14,9 @@ public class Customer {
     @NonNull
     private int years;
 
+    @NonNull
+    private String name;
+
     private int discount;
 
     // Standard getters and setters

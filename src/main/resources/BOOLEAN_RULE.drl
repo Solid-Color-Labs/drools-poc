@@ -1,6 +1,6 @@
 global com.poc.drools.domain.RuleResult ruleResult;
 import com.poc.drools.domain.TaxiRide;
-dialect  "mvel"
+dialect "mvel"
 
 agenda-group "Pass Fail Rules"
 rule "Should Break Rule"

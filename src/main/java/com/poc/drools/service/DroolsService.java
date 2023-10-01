@@ -1,9 +1,6 @@
 package com.poc.drools.service;
 
-import com.poc.drools.domain.Customer;
-import com.poc.drools.domain.Fare;
-import com.poc.drools.domain.RuleResult;
-import com.poc.drools.domain.TaxiRide;
+import com.poc.drools.domain.*;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import org.springframework.stereotype.Service;
@@ -52,6 +49,28 @@ public class DroolsService {
         kieSession.fireAllRules();
         kieSession.dispose();
         return customer.getDiscount();
+    }
+
+    public RuleResult checkCustomerName(Customer customer) {
+        RuleResult result = new RuleResult();
+        KieSession kieSession = kieContainer.newKieSession();
+        kieSession.getAgenda().getAgendaGroup("Customer Rules").setFocus();
+        kieSession.setGlobal("ruleResult", result);
+        kieSession.insert(customer);
+        kieSession.fireAllRules();
+        kieSession.dispose();
+        return result;
+    }
+
+    public RuleResult checkBusinessIsValidForTaxiRide(Taxi taxi) {
+        RuleResult result = new RuleResult();
+        KieSession kieSession = kieContainer.newKieSession();
+        kieSession.getAgenda().getAgendaGroup("List Rules").setFocus();
+        kieSession.setGlobal("ruleResult", result);
+        kieSession.insert(taxi);
+        kieSession.fireAllRules();
+        kieSession.dispose();
+        return result;
     }
 
 }
