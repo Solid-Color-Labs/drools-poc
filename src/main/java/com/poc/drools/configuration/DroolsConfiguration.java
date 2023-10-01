@@ -19,6 +19,7 @@ public class DroolsConfiguration {
         KieFileSystem kieFileSystem = kieServices.newKieFileSystem();
         kieFileSystem.write(ResourceFactory.newClassPathResource("TAXI_FARE_RULE.drl"));
         kieFileSystem.write(ResourceFactory.newClassPathResource("BOOLEAN_RULE.drl"));
+        kieFileSystem.write(ResourceFactory.newClassPathResource("Discount.drl.xlsx"));
 
         KieBuilder kieBuilder = kieServices.newKieBuilder(kieFileSystem);
         kieBuilder.buildAll();

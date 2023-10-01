@@ -1,5 +1,6 @@
 package com.poc.drools.service;
 
+import com.poc.drools.domain.Customer;
 import com.poc.drools.domain.Fare;
 import com.poc.drools.domain.RuleResult;
 import com.poc.drools.domain.TaxiRide;
@@ -42,6 +43,15 @@ public class DroolsService {
         kieSession.fireAllRules();
         kieSession.dispose();
         return result;
+    }
+
+    public int fireCustomerDecisionTable(Customer customer) {
+        KieSession kieSession = kieContainer.newKieSession();
+        kieSession.getAgenda().getAgendaGroup("Discount Rates").setFocus();
+        kieSession.insert(customer);
+        kieSession.fireAllRules();
+        kieSession.dispose();
+        return customer.getDiscount();
     }
 
 }

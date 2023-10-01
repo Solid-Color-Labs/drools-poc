@@ -3,6 +3,7 @@ package com.poc.drools.examples;
 import com.poc.drools.domain.Fare;
 import com.poc.drools.domain.RuleResult;
 import com.poc.drools.domain.TaxiRide;
+import com.poc.drools.domain.Customer;
 import com.poc.drools.service.DroolsService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +36,14 @@ public class DroolsUsecaseExamples {
         taxiRide.setDistanceInMile(9L);
         RuleResult result = droolsService.fireDroolsRule(taxiRide);
         assertTrue(result.isRuleBreak());
+    }
+
+    // See https://www.baeldung.com/drools-excel
+    @Test
+    public void shouldRunDecisionTable() {
+        Customer customer = new Customer(Customer.CustomerType.INDIVIDUAL, 5);
+        int discount = droolsService.fireCustomerDecisionTable(customer);
+        assertEquals(15, discount);
     }
 
 }
