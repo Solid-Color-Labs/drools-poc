@@ -15,3 +15,11 @@ rule "field list example"
     then
         ruleResult.setRuleBreak(true);
 end
+
+rule "field list example 2"
+    when
+        Taxi($customers: customers)
+        Customer(name == "John" && type == CustomerType.INDIVIDUAL) from $customers
+    then
+        ruleResult.setRuleBreak(true);
+end

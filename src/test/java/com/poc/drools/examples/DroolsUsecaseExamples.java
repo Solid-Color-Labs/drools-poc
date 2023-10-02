@@ -57,6 +57,7 @@ public class DroolsUsecaseExamples {
         Taxi taxi = new Taxi(List.of(new Customer(Customer.CustomerType.BUSINESS, 1, "Microsoft")));
         RuleResult result = droolsService.checkBusinessIsValidForTaxiRide(taxi);
         assertTrue(result.isRuleBreak());
+        assertIterableEquals(List.of("field list example"), result.getNamesOfRulesBroken());
     }
 
     @Test

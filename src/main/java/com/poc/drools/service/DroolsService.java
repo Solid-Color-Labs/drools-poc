@@ -1,6 +1,7 @@
 package com.poc.drools.service;
 
 import com.poc.drools.domain.*;
+import com.poc.drools.listener.RuleBreakEventListener;
 import org.kie.api.runtime.KieContainer;
 import org.kie.api.runtime.KieSession;
 import org.springframework.stereotype.Service;
@@ -62,19 +63,23 @@ public class DroolsService {
         return result;
     }
 
-    // See https://access.redhat.com/documentation/en-us/red_hat_process_automation_manager/7.6/html/designing_a_decision_service_using_drl_rules/drl-rules-con_drl-rules
-    // Calling halt() in the drl file allows you to exit a rule on rule break.
+    // Example also tracks name/description of rule(s) broken.
     public RuleResult checkBusinessIsValidForTaxiRide(Taxi taxi) {
         RuleResult result = new RuleResult();
+        RuleBreakEventListener ruleBreakEventListener = new RuleBreakEventListener();
         KieSession kieSession = kieContainer.newKieSession();
         kieSession.getAgenda().getAgendaGroup("List Rules").setFocus();
+        kieSession.addEventListener(ruleBreakEventListener);
         kieSession.setGlobal("ruleResult", result);
         kieSession.insert(taxi);
         kieSession.fireAllRules();
         kieSession.dispose();
+        result.setNamesOfRulesBroken(ruleBreakEventListener.getNamesOfRulesBroken());
         return result;
     }
 
+    // See https://access.redhat.com/documentation/en-us/red_hat_process_automation_manager/7.6/html/designing_a_decision_service_using_drl_rules/drl-rules-con_drl-rules
+    // Calling halt() in the drl file allows you to exit a rule on rule break.
     public RuleResult runHaltExampleToExitOnFirstRuleBreak(Customer customer) {
         RuleResult result = new RuleResult();
         KieSession kieSession = kieContainer.newKieSession();
@@ -82,7 +87,6 @@ public class DroolsService {
         kieSession.setGlobal("ruleResult", result);
         kieSession.insert(customer);
         kieSession.fireUntilHalt();
-//        kieSession.halt();
         kieSession.dispose();
         return result;
     }
